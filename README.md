@@ -13,7 +13,7 @@ This repository contains a Flask-based Sudoku application with Docker support fo
 1. **Clone the Repository**
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/pankajthakur888/Sudoku.git
 Navigate to the Project Directory
 
 bash
@@ -22,32 +22,6 @@ cd <repository-name>
 Working with Git
 Check the Status
 
-bash
-Copy code
-git status
-Add Changes
-
-bash
-Copy code
-git add <file>  # Add a specific file
-git add .       # Add all changes in the directory
-Commit Changes
-
-bash
-Copy code
-git commit -m "Commit message"
-Push Changes
-
-bash
-Copy code
-git push origin <branch-name>
-Pull Changes
-
-bash
-Copy code
-git pull origin <branch-name>
-Docker Deployment
-Prerequisites
 Ensure you have Docker installed on your machine. Follow the Docker installation guide if necessary.
 
 Dockerfile
