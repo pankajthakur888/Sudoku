@@ -1,0 +1,130 @@
+from flask import Flask, render_template, request, redirect, url_for
+
+app = Flask(__name__)
+
+# Sample Sudoku board (0 represents empty cells)
+board = [
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
+]
+
+@app.route('/')
+def index():
+    return render_template('sudoku.html', board=board)
+
+@app.route('/update', methods=['POST'])
+def update():
+    global board
+    for i in range(9):
+        for j in range(9):
+            val = request.form.get(f'cell-{i}-{j}')
+            if val:
+                board[i][j] = int(val)
+    return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+root@hippostores:/opt/PRO-DOCKER/kubernetescode/app# ls
+app.py  templates
+root@hippostores:/opt/PRO-DOCKER/kubernetescode/app# cat templates/sudoku.html 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kidoo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kidoo', sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 20px auto;
+            border: 3px solid #333;
+        }
+        td {
+            border: 1px solid #333;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            background-color: #fff;
+            position: relative;
+        }
+        td:nth-of-type(3n) {
+            border-right: 2px solid #333;
+        }
+        tr:nth-of-type(3n) td {
+            border-bottom: 2px solid #333;
+        }
+        td:last-child {
+            border-right: none;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            text-align: center;
+            font-size: 18px;
+            background-color: #e9ecef;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s;
+        }
+        input:focus {
+            background-color: #fff;
+            outline: none;
+        }
+        .btn-custom {
+            background-color: #28a745;
+            color: white;
+            border-radius: 0.25rem;
+        }
+        .btn-custom:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="my-4">Sudoku</h1>
+        <form action="{{ url_for('update') }}" method="post">
+            <table>
+                {% for i in range(9) %}
+                    <tr>
+                        {% for j in range(9) %}
+                            <td>
+                                <input type="number" name="cell-{{ i }}-{{ j }}" value="{{ board[i][j] if board[i][j] != 0 else '' }}" min="1" max="9">
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <button type="submit" class="btn btn-custom">Update</button>
+        </form>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
